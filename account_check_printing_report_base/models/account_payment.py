@@ -13,7 +13,8 @@ class AccountPayment(models.Model):
     @api.multi
     def do_print_checks(self):
         for rec in self:
-            if rec.company_id.check_layout_id:
-                return self.env['report'].get_action(
-                    rec, rec.company_id.check_layout_id.report)
-            return super(AccountPayment, self).do_print_checks()
+            if rec.company_id.check_layout_id is False:
+                return super(AccountPayment, self).do_print_checks()
+        return self.env['report'].get_action(
+            self, rec.company_id.check_layout_id.report)
+
